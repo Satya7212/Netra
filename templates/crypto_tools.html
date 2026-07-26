@@ -1,0 +1,327 @@
+<!-- templates/crypto_tools.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">CRYPTOGRAPHY_SUITE</h1>
+                <p class="text-muted">ADVANCED_ENCRYPTION_&_HASHING_UTILITIES</p>
+            </div>
+            <div class="status-item">
+                <div class="status-dot secure"></div>
+                <span>AES-256_ACTIVE</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Encryption Section -->
+    <div class="col-lg-6">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-lock"></i>
+                <span>TEXT_ENCRYPTION</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <input type="hidden" name="tool_type" value="encrypt">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">PLAINTEXT</label>
+                        <textarea class="elite-form-control" name="text" rows="4" 
+                                  placeholder="Enter sensitive text to encrypt..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">ENCRYPTION_KEY</label>
+                        <input type="password" class="elite-form-control" name="password" 
+                               placeholder="Enter strong encryption key..." required>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Use a strong password for AES-256 encryption
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn elite-btn-scan w-100">
+                        <i class="fas fa-shield-alt"></i> ENCRYPT_TEXT
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Decryption Section -->
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-unlock"></i>
+                <span>TEXT_DECRYPTION</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <input type="hidden" name="tool_type" value="decrypt">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">ENCRYPTED_DATA</label>
+                        <textarea class="elite-form-control" name="encrypted_data" rows="3" 
+                                  placeholder="Paste encrypted data here..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">DECRYPTION_KEY</label>
+                        <input type="password" class="elite-form-control" name="password" 
+                               placeholder="Enter decryption key..." required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">SALT_KEY</label>
+                        <input type="text" class="elite-form-control" name="salt" 
+                               placeholder="Enter salt from encryption..." required>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Salt is required for PBKDF2 key derivation
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn w-100">
+                        <i class="fas fa-key"></i> DECRYPT_TEXT
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hashing & Encoding Section -->
+    <div class="col-lg-6">
+        <!-- Hash Generator -->
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-fingerprint"></i>
+                <span>HASH_GENERATOR</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <input type="hidden" name="tool_type" value="hash">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">INPUT_TEXT</label>
+                        <textarea class="elite-form-control" name="text" rows="3" 
+                                  placeholder="Enter text to generate hash..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">HASH_ALGORITHM</label>
+                        <select class="elite-form-control" name="algorithm">
+                            <option value="sha256">SHA-256 (Recommended)</option>
+                            <option value="sha512">SHA-512 (High Security)</option>
+                            <option value="sha1">SHA-1 (Legacy)</option>
+                            <option value="md5">MD-5 (Legacy)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn w-100">
+                        <i class="fas fa-hashtag"></i> GENERATE_HASH
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Base64 Encoding -->
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-code"></i>
+                <span>BASE64_ENCODING</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form method="POST" class="mb-3">
+                            <input type="hidden" name="tool_type" value="base64_encode">
+                            <div class="mb-3">
+                                <label class="form-label" style="color: var(--text-light);">ENCODE_TEXT</label>
+                                <textarea class="elite-form-control" name="text" rows="2" 
+                                          placeholder="Text to encode..." required></textarea>
+                            </div>
+                            <button type="submit" class="elite-btn w-100">
+                                <i class="fas fa-arrow-up"></i> ENCODE
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form method="POST">
+                            <input type="hidden" name="tool_type" value="base64_decode">
+                            <div class="mb-3">
+                                <label class="form-label" style="color: var(--text-light);">DECODE_TEXT</label>
+                                <textarea class="elite-form-control" name="encoded_text" rows="2" 
+                                          placeholder="Base64 to decode..." required></textarea>
+                            </div>
+                            <button type="submit" class="elite-btn w-100">
+                                <i class="fas fa-arrow-down"></i> DECODE
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithm Info -->
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-info-circle"></i>
+                <span>ALGORITHM_SPECS</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">AES-256-CBC</span>
+                        <span class="result-status status-safe">SECURE</span>
+                    </div>
+                    <p class="text-muted small mb-0">Military-grade encryption with PBKDF2 key derivation</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">SHA-256</span>
+                        <span class="result-status status-safe">RECOMMENDED</span>
+                    </div>
+                    <p class="text-muted small mb-0">Cryptographically secure hashing algorithm</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">BASE64</span>
+                        <span class="result-status status-warning">ENCODING</span>
+                    </div>
+                    <p class="text-muted small mb-0">Binary to text encoding scheme</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+{% if error %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="elite-alert">
+            <div class="alert-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="alert-text">{{ error }}</span>
+            </div>
+            <div class="alert-progress"></div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if results %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>OPERATION_RESULTS</span>
+            </div>
+            <div class="elite-card-body">
+                {% if results.status == 'success' %}
+                    <div class="cyber-terminal mb-4">
+                        <span class="terminal-prompt">crypto@cybershield:~$</span> 
+                        <span class="terminal-command">operation_complete</span><br>
+                        <span class="terminal-output text-success">[SUCCESS] Operation completed successfully</span><br>
+                        
+                        {% if results.encrypted_data %}
+                            <span class="terminal-output">[ALGORITHM] {{ results.algorithm }}</span><br>
+                            <span class="terminal-output">[ENCRYPTED_DATA]</span><br>
+                            <div class="p-3 mt-2" style="background: rgba(15, 23, 42, 0.8); border-radius: 6px;">
+                                <code class="text-light">{{ results.encrypted_data }}</code>
+                            </div>
+                            <span class="terminal-output">[SALT_KEY] {{ results.salt }}</span><br>
+                            <span class="terminal-output text-warning">[SECURITY] Save salt key for decryption</span>
+                            
+                        {% elif results.decrypted_data %}
+                            <span class="terminal-output">[ALGORITHM] {{ results.algorithm }}</span><br>
+                            <span class="terminal-output">[DECRYPTED_DATA]</span><br>
+                            <div class="p-3 mt-2" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px;">
+                                <code class="text-success">{{ results.decrypted_data }}</code>
+                            </div>
+                            
+                        {% elif results.hash %}
+                            <span class="terminal-output">[ALGORITHM] {{ results.algorithm }}</span><br>
+                            <span class="terminal-output">[HASH_LENGTH] {{ results.length }} characters</span><br>
+                            <span class="terminal-output">[DIGEST]</span><br>
+                            <div class="p-3 mt-2" style="background: rgba(15, 23, 42, 0.8); border-radius: 6px;">
+                                <code class="text-light">{{ results.hash }}</code>
+                            </div>
+                            
+                        {% elif results.encoded %}
+                            <span class="terminal-output">[ENCODED_DATA]</span><br>
+                            <div class="p-3 mt-2" style="background: rgba(15, 23, 42, 0.8); border-radius: 6px;">
+                                <code class="text-light">{{ results.encoded }}</code>
+                            </div>
+                            
+                        {% elif results.decoded %}
+                            <span class="terminal-output">[DECODED_DATA]</span><br>
+                            <div class="p-3 mt-2" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px;">
+                                <code class="text-success">{{ results.decoded }}</code>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Copy to Clipboard Functionality -->
+                    <div class="d-flex gap-2 justify-content-end">
+                        {% if results.encrypted_data %}
+                        <button class="elite-btn" onclick="copyToClipboard('{{ results.encrypted_data }}')">
+                            <i class="fas fa-copy"></i> COPY_ENCRYPTED
+                        </button>
+                        <button class="elite-btn" onclick="copyToClipboard('{{ results.salt }}')">
+                            <i class="fas fa-key"></i> COPY_SALT
+                        </button>
+                        {% elif results.decrypted_data %}
+                        <button class="elite-btn" onclick="copyToClipboard('{{ results.decrypted_data }}')">
+                            <i class="fas fa-copy"></i> COPY_DECRYPTED
+                        </button>
+                        {% elif results.hash %}
+                        <button class="elite-btn" onclick="copyToClipboard('{{ results.hash }}')">
+                            <i class="fas fa-copy"></i> COPY_HASH
+                        </button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="cyber-terminal">
+                        <span class="terminal-prompt">crypto@cybershield:~$</span> 
+                        <span class="terminal-command">operation_failed</span><br>
+                        <span class="terminal-output text-danger">[ERROR] {{ results.message }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>SECURITY_PROTOCOL:</strong> All cryptographic operations are performed locally using AES-256 encryption. 
+            No data is transmitted to external servers. Always use strong passwords and securely store your salt keys.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Show success feedback
+        const originalText = event.target.innerHTML;
+        event.target.innerHTML = '<i class="fas fa-check"></i> COPIED';
+        event.target.style.background = 'var(--success)';
+        
+        setTimeout(() => {
+            event.target.innerHTML = originalText;
+            event.target.style.background = '';
+        }, 2000);
+    }, function(err) {
+        console.error('Could not copy text: ', err);
+    });
+}
+</script>
+{% endblock %}

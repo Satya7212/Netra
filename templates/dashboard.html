@@ -1,0 +1,249 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">SECURITY_DASHBOARD</h1>
+                <p class="text-muted">COMPREHENSIVE_THREAT_ANALYSIS_PLATFORM</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="status-item">
+                    <div class="status-dot online"></div>
+                    <span>LIVE_MONITORING</span>
+                </div>
+                <div class="elite-btn elite-btn-scan">
+                    <i class="fas fa-rocket"></i> QUICK_SCAN
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="elite-card text-center">
+            <div class="elite-card-body">
+                <div class="security-score-container">
+                    <div class="score-label">NETWORK_SECURITY</div>
+                    <div class="security-score">98%</div>
+                    <p class="text-muted">Ports & Services Analysis</p>
+                </div>
+                <a href="{{ url_for('network_scan') }}" class="elite-btn w-100 mt-3">
+                    <i class="fas fa-satellite-dish"></i> SCAN_NETWORK
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="elite-card text-center">
+            <div class="elite-card-body">
+                <div class="security-score-container">
+                    <div class="score-label">WEB_SECURITY</div>
+                    <div class="security-score">95%</div>
+                    <p class="text-muted">Headers & Configuration</p>
+                </div>
+                <a href="{{ url_for('web_security_scan') }}" class="elite-btn w-100 mt-3">
+                    <i class="fas fa-shield-alt"></i> ANALYZE_SITE
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="elite-card text-center">
+            <div class="elite-card-body">
+                <div class="security-score-container">
+                    <div class="score-label">ENCRYPTION</div>
+                    <div class="security-score">99%</div>
+                    <p class="text-muted">SSL & Crypto Tools</p>
+                </div>
+                <a href="{{ url_for('crypto_tools') }}" class="elite-btn w-100 mt-3">
+                    <i class="fas fa-key"></i> CRYPTO_TOOLS
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="elite-card text-center">
+            <div class="elite-card-body">
+                <div class="security-score-container">
+                    <div class="score-label">STEALTH_OPS</div>
+                    <div class="security-score">96%</div>
+                    <p class="text-muted">Steganography & Analysis</p>
+                </div>
+                <a href="{{ url_for('stego_tools') }}" class="elite-btn w-100 mt-3">
+                    <i class="fas fa-eye-slash"></i> STEGO_TOOLS
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Overview -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>SYSTEM_OVERVIEW</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="cyber-terminal mb-4">
+                    <span class="terminal-prompt">system@cybershield:~$</span> 
+                    <span class="terminal-command">status_check --all</span><br>
+                    <span class="terminal-output">[INFO] Initializing security modules...</span><br>
+                    <span class="terminal-output">[SUCCESS] Network scanner: <span style="color: var(--success);">OPERATIONAL</span></span><br>
+                    <span class="terminal-output">[SUCCESS] Web security analyzer: <span style="color: var(--success);">READY</span></span><br>
+                    <span class="terminal-output">[SUCCESS] SSL/TLS inspector: <span style="color: var(--success);">ACTIVE</span></span><br>
+                    <span class="terminal-output">[SUCCESS] Email security verifier: <span style="color: var(--success);">ONLINE</span></span><br>
+                    <span class="terminal-output">[SUCCESS] Cryptography suite: <span style="color: var(--success);">ENCRYPTED</span></span><br>
+                    <span class="terminal-output">[SUCCESS] Steganography tools: <span style="color: var(--success);">STEALTH_MODE</span></span>
+                </div>
+                
+                <h6 style="color: var(--text-light); margin-bottom: 1rem;">SYSTEM_METRICS</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">NETWORK_SCANNER</span>
+                                <span class="result-status status-safe">OPTIMAL</span>
+                            </div>
+                            <p class="text-muted mb-0">Real-time device discovery and service analysis</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">WEB_ANALYZER</span>
+                                <span class="result-status status-safe">SECURE</span>
+                            </div>
+                            <p class="text-muted mb-0">Comprehensive security header inspection</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">CRYPTO_SUITE</span>
+                                <span class="result-status status-safe">ENCRYPTED</span>
+                            </div>
+                            <p class="text-muted mb-0">AES-256 encryption and hashing utilities</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">STEALTH_OPS</span>
+                                <span class="result-status status-safe">ACTIVE</span>
+                            </div>
+                            <p class="text-muted mb-0">LSB steganography and data concealment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-bolt"></i>
+                <span>QUICK_ACTIONS</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="d-grid gap-3">
+                    <a href="{{ url_for('network_scan') }}" class="elite-btn">
+                        <i class="fas fa-network-wired"></i> NETWORK_DISCOVERY
+                    </a>
+                    <a href="{{ url_for('web_security_scan') }}" class="elite-btn">
+                        <i class="fas fa-globe"></i> WEB_SECURITY_SCAN
+                    </a>
+                    <a href="{{ url_for('ssl_scan') }}" class="elite-btn">
+                        <i class="fas fa-lock"></i> SSL_CERT_ANALYSIS
+                    </a>
+                    <a href="{{ url_for('email_scan') }}" class="elite-btn">
+                        <i class="fas fa-envelope"></i> EMAIL_SECURITY_CHECK
+                    </a>
+                    <a href="{{ url_for('crypto_tools') }}" class="elite-btn elite-btn-scan">
+                        <i class="fas fa-key"></i> ENCRYPTION_TOOLS
+                    </a>
+                    <a href="{{ url_for('stego_tools') }}" class="elite-btn elite-btn-scan">
+                        <i class="fas fa-eye-slash"></i> STEGANOGRAPHY
+                    </a>
+                </div>
+                
+                <div class="mt-4 p-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 8px;">
+                    <h6 style="color: var(--cyber-teal); margin-bottom: 0.5rem;">SECURITY_TIP</h6>
+                    <p class="text-muted small mb-0">
+                        Always verify SSL certificates and use strong encryption for sensitive data. 
+                        Regular security scanning helps identify vulnerabilities before they can be exploited.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-history"></i>
+                <span>RECENT_ACTIVITY</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">NETWORK_SCAN</span>
+                                <span class="result-status status-safe">COMPLETE</span>
+                            </div>
+                            <p class="text-muted mb-2">scanme.nmap.org</p>
+                            <small class="text-muted">2 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">SSL_ANALYSIS</span>
+                                <span class="result-status status-safe">SECURE</span>
+                            </div>
+                            <p class="text-muted mb-2">google.com</p>
+                            <small class="text-muted">15 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="scan-result">
+                            <div class="result-header">
+                                <span class="result-title">ENCRYPTION</span>
+                                <span class="result-status status-safe">SUCCESS</span>
+                            </div>
+                            <p class="text-muted mb-2">AES-256 Operation</p>
+                            <small class="text-muted">1 hour ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Security Notice -->
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+            <strong>OPERATIONAL_SECURITY:</strong> All scanning activities must comply with local laws and regulations. 
+            Only test systems you own or have explicit permission to analyze. Maintain operational security at all times.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+{% endblock %}

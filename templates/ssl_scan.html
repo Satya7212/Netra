@@ -1,0 +1,238 @@
+<!-- templates/ssl_scan.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">SSL/TLS_ANALYZER</h1>
+                <p class="text-muted">CERTIFICATE_VALIDATION_&_ENCRYPTION_PROTOCOL_ANALYSIS</p>
+            </div>
+            <div class="status-item">
+                <div class="status-dot secure"></div>
+                <span>ENCRYPTION_ACTIVE</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-lock"></i>
+                <span>SSL_CERTIFICATE_SCAN</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">TARGET_DOMAIN</label>
+                        <input type="text" class="elite-form-control" name="domain" 
+                               placeholder="example.com" required
+                               value="{{ domain if domain else '' }}">
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Enter domain name without http:// or https://
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn elite-btn-scan w-100">
+                        <i class="fas fa-certificate"></i> ANALYZE_SSL_CERTIFICATE
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-info-circle"></i>
+                <span>ANALYSIS_FEATURES</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">CERTIFICATE_VALIDITY</span>
+                        <span class="result-status status-safe">CRITICAL</span>
+                    </div>
+                    <p class="text-muted mb-0">Expiration date and chain validation</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">ENCRYPTION_PROTOCOLS</span>
+                        <span class="result-status status-safe">ESSENTIAL</span>
+                    </div>
+                    <p class="text-muted mb-0">TLS/SSL protocol version analysis</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">CIPHER_STRENGTH</span>
+                        <span class="result-status status-warning">ADVANCED</span>
+                    </div>
+                    <p class="text-muted mb-0">Encryption cipher suite evaluation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="elite-card h-100">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>CERTIFICATE_ANALYSIS</span>
+            </div>
+            <div class="elite-card-body">
+                {% if error %}
+                    <div class="elite-alert">
+                        <div class="alert-content">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span class="alert-text">{{ error }}</span>
+                        </div>
+                        <div class="alert-progress"></div>
+                    </div>
+                {% endif %}
+
+                {% if results %}
+                    {% if results.error %}
+                        <div class="cyber-terminal">
+                            <span class="terminal-prompt">ssl@cybershield:~$</span> 
+                            <span class="terminal-command">cert_analyze --domain {{ domain }}</span><br>
+                            <span class="terminal-output text-danger">[ERROR] {{ results.error }}</span>
+                        </div>
+                    {% else %}
+                        <div class="cyber-terminal mb-4">
+                            <span class="terminal-prompt">ssl@cybershield:~$</span> 
+                            <span class="terminal-command">cert_analyze --domain {{ domain }}</span><br>
+                            <span class="terminal-output">[INFO] Analysis initiated at {{ results.scan_time }}</span><br>
+                            <span class="terminal-output">[INFO] Target: {{ results.domain }}</span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">CERTIFICATE_INFO</h6>
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">SUBJECT</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">
+                                        {{ results.certificate_info.subject.commonName if results.certificate_info.subject else 'Unknown' }}
+                                    </p>
+                                </div>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">ISSUER</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">
+                                        {{ results.certificate_info.issuer.commonName if results.certificate_info.issuer else 'Unknown' }}
+                                    </p>
+                                </div>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">VALID_FROM</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">{{ results.certificate_info.valid_from }}</p>
+                                </div>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">VALID_UNTIL</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">{{ results.certificate_info.valid_until }}</p>
+                                </div>
+                                
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">EXPIRES_IN</span>
+                                        {% set days_left = results.certificate_info.days_until_expiry %}
+                                        <span class="result-status status-{{ 'critical' if days_left < 30 else 'warning' if days_left < 90 else 'safe' }}">
+                                            {{ days_left }} DAYS
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">CONNECTION_INFO</h6>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">PROTOCOL</span>
+                                        <span class="result-status status-{{ 'safe' if results.connection_info.protocol not in ['TLSv1', 'TLSv1.1', 'SSLv3'] else 'critical' }}">
+                                            {{ results.connection_info.protocol }}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">CIPHER_SUITE</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">{{ results.connection_info.cipher }}</p>
+                                </div>
+                                
+                                <div class="scan-result mb-3">
+                                    <div class="result-header">
+                                        <span class="result-title">KEY_STRENGTH</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">{{ results.connection_info.key_size }} bits</p>
+                                </div>
+                                
+                                <!-- Security Assessment -->
+                                <div class="mt-4 p-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 8px;">
+                                    <h6 style="color: var(--text-light); margin-bottom: 0.5rem;">SECURITY_ASSESSMENT</h6>
+                                    <div class="result-header mb-2">
+                                        <span class="result-title">RISK_LEVEL</span>
+                                        <span class="result-status status-{{ 'safe' if results.security_assessment.risk_level in ['Low','None'] else 'warning' if results.security_assessment.risk_level == 'Medium' else 'critical' }}">
+                                            {{ results.security_assessment.risk_level }}
+                                        </span>
+                                    </div>
+                                    
+                                    {% if results.security_assessment.issues %}
+                                    <div class="mb-2">
+                                        <small style="color: var(--text-light);">ISSUES_IDENTIFIED:</small>
+                                        <ul class="mb-0 mt-1" style="padding-left: 1rem;">
+                                            {% for issue in results.security_assessment.issues %}
+                                                <li class="text-muted small">{{ issue }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if results.security_assessment.recommendations %}
+                                    <div>
+                                        <small style="color: var(--text-light);">RECOMMENDATIONS:</small>
+                                        <ul class="mb-0 mt-1" style="padding-left: 1rem;">
+                                            {% for recommendation in results.security_assessment.recommendations %}
+                                                <li class="text-muted small">{{ recommendation }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">NO_ANALYSIS_DATA</h5>
+                        <p class="text-muted">Enter a domain to analyze SSL/TLS configuration</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>SECURITY_NOTICE:</strong> SSL/TLS certificate analysis helps ensure secure encrypted communications. 
+            Regular certificate monitoring prevents service disruptions due to expiration.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+{% endblock %}

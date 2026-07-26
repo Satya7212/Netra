@@ -1,0 +1,379 @@
+<!-- templates/stego_tools.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">STEGANOGRAPHY_LAB</h1>
+                <p class="text-muted">COVERT_DATA_CONCEALMENT_&_ANALYSIS</p>
+            </div>
+            <div class="status-item">
+                <div class="status-dot secure"></div>
+                <span>STEALTH_MODE_ACTIVE</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Encode Section -->
+    <div class="col-lg-6">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-upload"></i>
+                <span>ENCODE_DATA</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="tool_type" value="encode">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">CARRIER_IMAGE</label>
+                        <input type="file" class="elite-form-control" name="image" 
+                               accept=".png,.jpg,.jpeg,.bmp,.tiff" required>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            PNG format recommended for lossless compression
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">SECRET_MESSAGE</label>
+                        <textarea class="elite-form-control" name="text" rows="3" 
+                                  placeholder="Enter text to conceal in image..." required></textarea>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Maximum capacity depends on image size
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">ENCRYPTION_KEY (Optional)</label>
+                        <input type="password" class="elite-form-control" name="password" 
+                               placeholder="Additional encryption layer...">
+                    </div>
+                    
+                    <button type="submit" class="elite-btn elite-btn-scan w-100">
+                        <i class="fas fa-eye-slash"></i> CONCEAL_DATA
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Decode Section -->
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-download"></i>
+                <span>EXTRACT_DATA</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="tool_type" value="decode">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">STEGO_IMAGE</label>
+                        <input type="file" class="elite-form-control" name="image" 
+                               accept=".png,.jpg,.jpeg,.bmp,.tiff" required>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Image containing hidden data
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn w-100">
+                        <i class="fas fa-search"></i> EXTRACT_HIDDEN_DATA
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Analysis & Info Section -->
+    <div class="col-lg-6">
+        <!-- Steganalysis Tool -->
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-search"></i>
+                <span>STEGANALYSIS</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="tool_type" value="analyze">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">IMAGE_TO_ANALYZE</label>
+                        <input type="file" class="elite-form-control" name="image" 
+                               accept=".png,.jpg,.jpeg,.bmp,.tiff" required>
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Detect potential hidden data using LSB analysis
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn w-100">
+                        <i class="fas fa-chart-bar"></i> ANALYZE_FOR_STEGANOGRAPHY
+                    </button>
+                </form>
+                
+                <!-- Technical Info -->
+                <div class="mt-4 p-3" style="background: rgba(15, 23, 42, 0.6); border-radius: 8px;">
+                    <h6 style="color: var(--cyber-teal); margin-bottom: 0.5rem;">LSB_STEGANOGRAPHY</h6>
+                    <p class="text-muted small mb-2">
+                        LSB (Least Significant Bit) technique modifies the least significant bits 
+                        of image pixels to hide data. These modifications are visually imperceptible.
+                    </p>
+                    <ul class="text-muted small mb-0">
+                        <li>Each RGB pixel can store 3 bits of data</li>
+                        <li>Changes are invisible to human perception</li>
+                        <li>PNG format recommended for lossless operation</li>
+                        <li>Detection through statistical analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capacity Calculator -->
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-calculator"></i>
+                <span>CAPACITY_CALCULATOR</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div style="color: var(--cyber-teal); font-size: 1.5rem; font-weight: 600;">3×</div>
+                        <small class="text-muted">Bits per Pixel</small>
+                    </div>
+                    <div class="col-4">
+                        <div style="color: var(--primary-blue); font-size: 1.5rem; font-weight: 600;">8:1</div>
+                        <small class="text-muted">Compression Ratio</small>
+                    </div>
+                    <div class="col-4">
+                        <div style="color: var(--success); font-size: 1.5rem; font-weight: 600;">100%</div>
+                        <small class="text-muted">Visual Integrity</small>
+                    </div>
+                </div>
+                
+                <div class="mt-3 p-3" style="background: rgba(30, 41, 59, 0.6); border-radius: 6px;">
+                    <h6 style="color: var(--text-light); font-size: 0.9rem;">STORAGE_CAPACITY</h6>
+                    <p class="text-muted small mb-0">
+                        A 1000×1000 pixel image can conceal approximately 375 KB of data 
+                        without visible quality degradation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section -->
+{% if error %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="elite-alert">
+            <div class="alert-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="alert-text">{{ error }}</span>
+            </div>
+            <div class="alert-progress"></div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if results %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>OPERATION_RESULTS</span>
+            </div>
+            <div class="elite-card-body">
+                {% if results.status == 'success' %}
+                    <div class="cyber-terminal mb-4">
+                        <span class="terminal-prompt">stego@cybershield:~$</span> 
+                        <span class="terminal-command">operation_complete</span><br>
+                        <span class="terminal-output text-success">[SUCCESS] Operation completed successfully</span>
+                    </div>
+                    
+                    {% if results.encoded_image %}
+                        <!-- Encoding Results -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">ENCODED_IMAGE</h6>
+                                <div class="text-center">
+                                    <img src="{{ results.encoded_image }}" class="img-fluid border border-primary" 
+                                         alt="Encoded Image" style="max-height: 300px; border-radius: 8px;">
+                                    <div class="mt-3">
+                                        <a href="{{ results.encoded_image }}" download="stego_image.png" class="elite-btn">
+                                            <i class="fas fa-download"></i> DOWNLOAD_IMAGE
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">ENCODING_DETAILS</h6>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">ORIGINAL_SIZE</span>
+                                        <span class="result-status status-safe">{{ results.original_size }} bytes</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">ENCODED_SIZE</span>
+                                        <span class="result-status status-safe">{{ results.encoded_size }} bytes</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">HIDDEN_DATA</span>
+                                        <span class="result-status status-safe">{{ results.hidden_chars }} characters</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">METHOD</span>
+                                        <span class="result-status status-warning">LSB_STEGANOGRAPHY</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 p-3" style="background: rgba(0, 245, 212, 0.1); border-radius: 6px;">
+                                    <h6 style="color: var(--cyber-teal); font-size: 0.9rem;">OPERATIONAL_NOTICE</h6>
+                                    <p class="text-muted small mb-0">
+                                        The encoded image appears identical to the original but contains hidden data. 
+                                        Share securely and remember the extraction method.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    {% elif results.decoded_text %}
+                        <!-- Decoding Results -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">EXTRACTED_DATA</h6>
+                                <div class="p-4" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
+                                    <code class="text-success" style="font-size: 0.9rem; line-height: 1.5;">{{ results.decoded_text }}</code>
+                                </div>
+                                <div class="mt-3 d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">Extracted {{ results.extracted_chars }} characters</span>
+                                    <button class="elite-btn" onclick="copyToClipboard('{{ results.decoded_text }}')">
+                                        <i class="fas fa-copy"></i> COPY_TEXT
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    {% elif results.suspicion_level %}
+                        <!-- Analysis Results -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">IMAGE_ANALYSIS</h6>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">IMAGE_SIZE</span>
+                                        <span class="result-status status-safe">{{ results.image_size }}</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">COLOR_MODE</span>
+                                        <span class="result-status status-safe">{{ results.image_mode }}</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">TOTAL_PIXELS</span>
+                                        <span class="result-status status-safe">{{ results.total_pixels }}</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">LSB_ONES</span>
+                                        <span class="result-status status-warning">{{ results.lsb_ones }}</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">LSB_ZEROS</span>
+                                        <span class="result-status status-warning">{{ results.lsb_zeros }}</span>
+                                    </div>
+                                </div>
+                                <div class="scan-result">
+                                    <div class="result-header">
+                                        <span class="result-title">LSB_RATIO</span>
+                                        <span class="result-status status-{{ 'critical' if results.lsb_ratio > 0.6 or results.lsb_ratio < 0.4 else 'safe' }}">
+                                            {{ results.lsb_ratio }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">SECURITY_ASSESSMENT</h6>
+                                <div class="text-center p-4" style="background: rgba(15, 23, 42, 0.8); border-radius: 8px;">
+                                    <div class="score-label">SUSPICION_LEVEL</div>
+                                    <div class="security-score" style="color: {% if results.suspicion_level == 'High' %}var(--danger){% elif results.suspicion_level == 'Medium' %}var(--warning){% else %}var(--success){% endif %};">
+                                        {{ results.suspicion_level }}
+                                    </div>
+                                    <p class="text-muted small mt-2">{{ results.analysis }}</p>
+                                </div>
+                                
+                                <div class="mt-3 p-3" style="background: {% if results.suspicion_level == 'High' %}rgba(239, 68, 68, 0.1){% elif results.suspicion_level == 'Medium' %}rgba(245, 158, 11, 0.1){% else %}rgba(16, 185, 129, 0.1){% endif %}; 
+                                      border: 1px solid {% if results.suspicion_level == 'High' %}rgba(239, 68, 68, 0.3){% elif results.suspicion_level == 'Medium' %}rgba(245, 158, 11, 0.3){% else %}rgba(16, 185, 129, 0.3){% endif %}; 
+                                      border-radius: 6px;">
+                                    <h6 style="color: {% if results.suspicion_level == 'High' %}var(--danger){% elif results.suspicion_level == 'Medium' %}var(--warning){% else %}var(--success){% endif %}; 
+                                        font-size: 0.9rem;">ANALYSIS_REPORT</h6>
+                                    <p class="text-muted small mb-0">
+                                        {% if results.suspicion_level == 'High' %}
+                                            High probability of hidden data. LSB distribution shows significant deviation from expected random distribution.
+                                        {% elif results.suspicion_level == 'Medium' %}
+                                            Moderate suspicion of hidden data. Further analysis recommended.
+                                        {% else %}
+                                            Low probability of hidden data. LSB distribution appears normal.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                {% else %}
+                    <div class="cyber-terminal">
+                        <span class="terminal-prompt">stego@cybershield:~$</span> 
+                        <span class="terminal-command">operation_failed</span><br>
+                        <span class="terminal-output text-danger">[ERROR] {{ results.message }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>OPERATIONAL_SECURITY:</strong> Steganography should only be used for legitimate security purposes. 
+            Always ensure compliance with local laws and obtain proper authorization before conducting analysis.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        const originalText = event.target.innerHTML;
+        event.target.innerHTML = '<i class="fas fa-check"></i> COPIED';
+        event.target.style.background = 'var(--success)';
+        
+        setTimeout(() => {
+            event.target.innerHTML = originalText;
+            event.target.style.background = '';
+        }, 2000);
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,226 @@
+<!-- templates/web_security.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">WEB_SECURITY_SCANNER</h1>
+                <p class="text-muted">COMPREHENSIVE_WEB_APPLICATION_SECURITY_ANALYSIS</p>
+            </div>
+            <div class="status-item">
+                <div class="status-dot secure"></div>
+                <span>ANALYZER_READY</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-globe"></i>
+                <span>WEB_SECURITY_SCAN</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">TARGET_URL</label>
+                        <input type="url" class="elite-form-control" name="url" 
+                               placeholder="https://example.com" required
+                               value="{{ url if url else '' }}">
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Enter full URL with http:// or https://
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn elite-btn-scan w-100">
+                        <i class="fas fa-shield-alt"></i> INITIATE_SECURITY_SCAN
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-info-circle"></i>
+                <span>SCAN_CAPABILITIES</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">SECURITY_HEADERS</span>
+                        <span class="result-status status-safe">CRITICAL</span>
+                    </div>
+                    <p class="text-muted mb-0">Analysis of CSP, HSTS, X-Frame-Options, and more</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">SSL/TLS_CONFIG</span>
+                        <span class="result-status status-safe">ESSENTIAL</span>
+                    </div>
+                    <p class="text-muted mb-0">Certificate validation and encryption protocol analysis</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">HTTPS_ENFORCEMENT</span>
+                        <span class="result-status status-warning">RECOMMENDED</span>
+                    </div>
+                    <p class="text-muted mb-0">HTTP to HTTPS redirect verification</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="elite-card h-100">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>SECURITY_RESULTS</span>
+            </div>
+            <div class="elite-card-body">
+                {% if error %}
+                    <div class="elite-alert">
+                        <div class="alert-content">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span class="alert-text">{{ error }}</span>
+                        </div>
+                        <div class="alert-progress"></div>
+                    </div>
+                {% endif %}
+
+                {% if results %}
+                    {% if results.error %}
+                        <div class="cyber-terminal">
+                            <span class="terminal-prompt">websec@cybershield:~$</span> 
+                            <span class="terminal-command">security_scan --url {{ url }}</span><br>
+                            <span class="terminal-output text-danger">[ERROR] {{ results.error }}</span>
+                        </div>
+                    {% else %}
+                        <div class="cyber-terminal mb-4">
+                            <span class="terminal-prompt">websec@cybershield:~$</span> 
+                            <span class="terminal-command">security_scan --url {{ url }}</span><br>
+                            <span class="terminal-output">[INFO] Scan initiated at {{ results.scan_time }}</span><br>
+                            <span class="terminal-output">[INFO] Target: {{ results.domain }}</span>
+                        </div>
+
+                        <!-- Security Score -->
+                        <div class="text-center mb-4 p-4" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px;">
+                            <div class="score-label">OVERALL_SECURITY_SCORE</div>
+                            <div class="security-score">{{ results.security_score }}%</div>
+                            <div class="progress mt-3" style="height: 8px; background: rgba(30, 41, 59, 0.6);">
+                                <div class="progress-bar" style="width: {{ results.security_score }}%; 
+                                    background: linear-gradient(90deg, var(--cyber-teal), var(--primary-blue));">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">SECURITY_HEADERS</h6>
+                                {% for header_name, header_info in results.security_headers.items() %}
+                                    {% if header_name != 'score' and header_name != 'error' %}
+                                    <div class="scan-result mb-2">
+                                        <div class="result-header">
+                                            <span class="result-title">{{ header_name }}</span>
+                                            {% if header_info.present %}
+                                                <span class="result-status status-safe">PRESENT</span>
+                                            {% else %}
+                                                <span class="result-status status-critical">MISSING</span>
+                                            {% endif %}
+                                        </div>
+                                        {% if header_info.present %}
+                                            <code class="text-muted small">{{ header_info.value }}</code>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 style="color: var(--text-light); margin-bottom: 1rem;">CONFIGURATION</h6>
+                                
+                                <!-- HTTPS Redirect -->
+                                <div class="scan-result mb-2">
+                                    <div class="result-header">
+                                        <span class="result-title">HTTPS_REDIRECT</span>
+                                        {% if results.https_redirect.redirects %}
+                                            <span class="result-status status-safe">ENABLED</span>
+                                        {% else %}
+                                            <span class="result-status status-warning">DISABLED</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-muted small mb-0">
+                                        {% if results.https_redirect.redirects %}
+                                            HTTP properly redirects to HTTPS
+                                        {% else %}
+                                            No HTTPS redirect configured
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <!-- SSL Certificate -->
+                                <div class="scan-result mb-2">
+                                    <div class="result-header">
+                                        <span class="result-title">SSL_CERTIFICATE</span>
+                                        {% if results.ssl_info.valid %}
+                                            <span class="result-status status-safe">VALID</span>
+                                        {% else %}
+                                            <span class="result-status status-critical">INVALID</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-muted small mb-0">
+                                        {% if results.ssl_info.valid %}
+                                            Certificate is valid and properly configured
+                                        {% else %}
+                                            Certificate issues detected
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <!-- Recommendations -->
+                                {% if results.recommendations %}
+                                <div class="mt-3">
+                                    <h6 style="color: var(--text-light); margin-bottom: 0.5rem;">RECOMMENDATIONS</h6>
+                                    <div class="elite-alert">
+                                        <div class="alert-content">
+                                            <i class="fas fa-lightbulb"></i>
+                                            <div>
+                                                <ul class="mb-0" style="padding-left: 1rem;">
+                                                    {% for recommendation in results.recommendations %}
+                                                        <li class="text-muted">{{ recommendation }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-shield-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">NO_SCAN_DATA</h5>
+                        <p class="text-muted">Enter a URL to perform security analysis</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>SECURITY_NOTICE:</strong> Web security scanning helps identify misconfigurations and vulnerabilities. 
+            Always ensure you have permission to scan the target website and comply with their terms of service.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+{% endblock %}

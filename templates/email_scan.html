@@ -1,0 +1,267 @@
+<!-- templates/email_scan.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold" style="color: var(--text-light);">EMAIL_SECURITY_ANALYZER</h1>
+                <p class="text-muted">SPF_DKIM_DMARC_&_MX_RECORD_VALIDATION</p>
+            </div>
+            <div class="status-item">
+                <div class="status-dot secure"></div>
+                <span>AUTH_READY</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="elite-card">
+            <div class="elite-card-header">
+                <i class="fas fa-envelope"></i>
+                <span>EMAIL_SECURITY_SCAN</span>
+            </div>
+            <div class="elite-card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" style="color: var(--text-light);">TARGET_DOMAIN</label>
+                        <input type="text" class="elite-form-control" name="domain" 
+                               placeholder="example.com" required
+                               value="{{ domain if domain else '' }}">
+                        <div class="form-text" style="color: var(--text-muted);">
+                            Enter the domain part of your email address (after @)
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="elite-btn elite-btn-scan w-100">
+                        <i class="fas fa-mail-bulk"></i> ANALYZE_EMAIL_SECURITY
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="elite-card mt-4">
+            <div class="elite-card-header">
+                <i class="fas fa-info-circle"></i>
+                <span>PROTECTION_LAYERS</span>
+            </div>
+            <div class="elite-card-body">
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">SPF_RECORD</span>
+                        <span class="result-status status-safe">ESSENTIAL</span>
+                    </div>
+                    <p class="text-muted mb-0">Prevents email spoofing and forgery</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">DKIM_SIGNATURE</span>
+                        <span class="result-status status-safe">CRITICAL</span>
+                    </div>
+                    <p class="text-muted mb-0">Email authentication and integrity</p>
+                </div>
+                <div class="scan-result">
+                    <div class="result-header">
+                        <span class="result-title">DMARC_POLICY</span>
+                        <span class="result-status status-warning">ADVANCED</span>
+                    </div>
+                    <p class="text-muted mb-0">Email validation and reporting</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="elite-card h-100">
+            <div class="elite-card-header">
+                <i class="fas fa-terminal"></i>
+                <span>SECURITY_REPORT</span>
+            </div>
+            <div class="elite-card-body">
+                {% if error %}
+                    <div class="elite-alert">
+                        <div class="alert-content">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span class="alert-text">{{ error }}</span>
+                        </div>
+                        <div class="alert-progress"></div>
+                    </div>
+                {% endif %}
+
+                {% if results %}
+                    {% if results.error %}
+                        <div class="cyber-terminal">
+                            <span class="terminal-prompt">emailsec@cybershield:~$</span> 
+                            <span class="terminal-command">auth_check --domain {{ domain }}</span><br>
+                            <span class="terminal-output text-danger">[ERROR] {{ results.error }}</span>
+                        </div>
+                    {% else %}
+                        <div class="cyber-terminal mb-4">
+                            <span class="terminal-prompt">emailsec@cybershield:~$</span> 
+                            <span class="terminal-command">auth_check --domain {{ domain }}</span><br>
+                            <span class="terminal-output">[INFO] Analysis initiated at {{ results.scan_time }}</span><br>
+                            <span class="terminal-output">[INFO] Target: {{ results.domain }}</span>
+                        </div>
+
+                        <!-- Security Score -->
+                        <div class="text-center mb-4 p-4" style="background: rgba(15, 23, 42, 0.6); border-radius: 12px;">
+                            <div class="score-label">EMAIL_SECURITY_SCORE</div>
+                            <div class="security-score">{{ results.security_score }}%</div>
+                            <div class="progress mt-3" style="height: 8px; background: rgba(30, 41, 59, 0.6);">
+                                <div class="progress-bar" style="width: {{ results.security_score }}%; 
+                                    background: linear-gradient(90deg, var(--cyber-teal), var(--primary-blue));">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- SPF Record -->
+                            <div class="col-md-6 mb-3">
+                                <div class="scan-result h-100">
+                                    <div class="result-header">
+                                        <span class="result-title">SPF_RECORD</span>
+                                        {% if results.spf.status == 'Found' %}
+                                            <span class="result-status status-safe">CONFIGURED</span>
+                                        {% else %}
+                                            <span class="result-status status-critical">MISSING</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if results.spf.status == 'Found' %}
+                                        <code class="text-muted small">{{ results.spf.record }}</code>
+                                        {% if results.spf.analysis.issues %}
+                                        <div class="mt-2">
+                                            <small style="color: var(--warning);">ISSUES:</small>
+                                            <ul class="mb-0 mt-1" style="padding-left: 1rem;">
+                                                {% for issue in results.spf.analysis.issues %}
+                                                    <li class="text-muted small">{{ issue }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-muted small mb-0">No SPF record found</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- DMARC Record -->
+                            <div class="col-md-6 mb-3">
+                                <div class="scan-result h-100">
+                                    <div class="result-header">
+                                        <span class="result-title">DMARC_RECORD</span>
+                                        {% if results.dmarc.status == 'Found' %}
+                                            <span class="result-status status-safe">CONFIGURED</span>
+                                        {% else %}
+                                            <span class="result-status status-critical">MISSING</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if results.dmarc.status == 'Found' %}
+                                        <code class="text-muted small">{{ results.dmarc.record }}</code>
+                                        {% if results.dmarc.analysis.issues %}
+                                        <div class="mt-2">
+                                            <small style="color: var(--warning);">ISSUES:</small>
+                                            <ul class="mb-0 mt-1" style="padding-left: 1rem;">
+                                                {% for issue in results.dmarc.analysis.issues %}
+                                                    <li class="text-muted small">{{ issue }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-muted small mb-0">No DMARC record found</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- DKIM Record -->
+                            <div class="col-md-6 mb-3">
+                                <div class="scan-result h-100">
+                                    <div class="result-header">
+                                        <span class="result-title">DKIM_RECORD</span>
+                                        {% if results.dkim.status == 'Found' %}
+                                            <span class="result-status status-safe">CONFIGURED</span>
+                                        {% else %}
+                                            <span class="result-status status-critical">MISSING</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if results.dkim.status == 'Found' %}
+                                        <p class="text-muted small mb-0">
+                                            Selectors found: {{ results.dkim.selectors|join(', ') }}
+                                        </p>
+                                    {% else %}
+                                        <p class="text-muted small mb-0">No DKIM record found</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- MX Records -->
+                            <div class="col-md-6 mb-3">
+                                <div class="scan-result h-100">
+                                    <div class="result-header">
+                                        <span class="result-title">MX_RECORDS</span>
+                                        {% if results.mx_records.status == 'Found' %}
+                                            <span class="result-status status-safe">CONFIGURED</span>
+                                        {% else %}
+                                            <span class="result-status status-critical">MISSING</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if results.mx_records.status == 'Found' %}
+                                        <ul class="mb-0 mt-1" style="padding-left: 1rem;">
+                                            {% for record in results.mx_records.records %}
+                                                <li class="text-muted small">
+                                                    Priority {{ record.preference }}: {{ record.exchange }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="text-muted small mb-0">No MX records found</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recommendations -->
+                        {% if results.recommendations %}
+                        <div class="mt-3">
+                            <h6 style="color: var(--text-light); margin-bottom: 0.5rem;">SECURITY_RECOMMENDATIONS</h6>
+                            <div class="elite-alert">
+                                <div class="alert-content">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <div>
+                                        <ul class="mb-0" style="padding-left: 1rem;">
+                                            {% for recommendation in results.recommendations %}
+                                                <li class="text-muted">{{ recommendation }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-envelope fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">NO_ANALYSIS_DATA</h5>
+                        <p class="text-muted">Enter a domain to analyze email security configuration</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="elite-alert mt-4">
+    <div class="alert-content">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>SECURITY_NOTICE:</strong> Proper email authentication prevents spoofing and phishing attacks. 
+            SPF, DKIM, and DMARC work together to verify sender identity and protect your domain reputation.
+        </div>
+    </div>
+    <div class="alert-progress"></div>
+</div>
+{% endblock %}
